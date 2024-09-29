@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 // import "./App.css";
 import "./index.css";
+import toast from "react-hot-toast";
 
 function App() {
   const [text, setText] = useState("");
@@ -22,7 +23,7 @@ function App() {
     navigator.clipboard
       .writeText(text)
       .then(() => {
-        // alert("Text copied to clipboard!");
+        toast.success("text copied");
       })
       .catch((error) => {
         console.error("Error copying text: ", error);
@@ -38,17 +39,25 @@ function App() {
       <h1 className=' text-center text-3xl my-8'>
         Welcome to webnote , write your text
       </h1>
-      <div className='container mx-auto  px-8'>
+      <div className='container mx-auto  px-8 tracking-widest'>
         <textarea
-          className='w-full h-[80vh] outline-none text-2xl bg-none '
+          className='w-full h-[80vh] outline-none text-3xl bg-none '
           value={text}
           onChange={handleTextChange}
           placeholder='Start writing...'
         />
       </div>
       <div className='flex justify-center gap-6 '>
-        <button onClick={clearText}>Clear Text</button>
-        <button onClick={copyText}>Copy Text</button>
+        <button
+          className='hover:bg-gray-100 px-4 py-2 rounded-lg'
+          onClick={clearText}>
+          Clear Text
+        </button>
+        <button
+          className='hover:bg-gray-100 px-4 py-2 rounded-lg'
+          onClick={copyText}>
+          Copy Text
+        </button>
       </div>
     </div>
   );
