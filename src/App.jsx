@@ -36,7 +36,7 @@ function App() {
 
   return (
     <div className='container  mx-auto '>
-      <h1 className=' text-center text-3xl my-8'>
+      <h1 className=' text-center text-3xl my-8 text-slate-500'>
         Welcome to webnote , write your text
       </h1>
       <div className='container mx-auto  px-8 tracking-widest'>
