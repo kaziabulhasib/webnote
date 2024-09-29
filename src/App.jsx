@@ -36,12 +36,12 @@ function App() {
 
   return (
     <div className='container  mx-auto '>
-      <h1 className=' text-center text-3xl my-8 text-slate-500'>
+      <h1 className=' text-center lg:text-3xl text-2xl my-8 text-slate-500'>
         Welcome to webnote , write your text
       </h1>
       <div className='container mx-auto  px-8 tracking-widest'>
         <textarea
-          className='w-full h-[80vh] outline-none text-3xl bg-none '
+          className='w-full lg:h-[80vh] h-[75vh] outline-none text-3xl bg-none text-slate-600 '
           value={text}
           onChange={handleTextChange}
           placeholder='Start writing...'
@@ -58,6 +58,7 @@ function App() {
           onClick={copyText}>
           Copy Text
         </button>
+        {/* <button className='text-semibold text-2xl'>...</button> */}
       </div>
     </div>
   );
