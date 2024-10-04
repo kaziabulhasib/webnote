@@ -130,7 +130,7 @@ function App() {
 
       <div className='container mx-auto px-8 tracking-widest lg:mt-16 mt-6'>
         <textarea
-          className='w-full lg:h-[80vh] h-[75vh] outline-none text-3xl bg-none text-slate-600'
+          className='w-full lg:h-[75vh] h-[70vh] outline-none text-3xl bg-none text-slate-600'
           value={notes[currentNoteIndex].text}
           onChange={handleTextChange}
           placeholder=' Welcome to WebNote, write your text...'
@@ -139,41 +139,43 @@ function App() {
 
       <div className='flex justify-center gap-6 mt-4'>
         <button
-          className='hover:bg-gray-100 px-4 py-2 rounded-lg'
+          className='hover:bg-red-100 text-red-500 px-4 py-2 rounded-lg'
           onClick={clearText}>
           Clear Text
         </button>
         <button
-          className='hover:bg-gray-100 px-4 py-2 rounded-lg'
+          className='hover:bg-blue-100 text-blue-500 px-4 py-2 rounded-lg'
           onClick={copyText}>
           Copy Text
         </button>
         <button
-          className='hover:bg-gray-100 px-4 py-2 rounded-lg'
+          className='hover:bg-blue-100 text-blue-500 px-4 py-2 rounded-lg'
           onClick={downloadNote}>
           Download
         </button>
       </div>
 
       {isRenameModalOpen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
-          <div className='bg-white p-6 rounded'>
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 '>
+          <div className='bg-white p-16 rounded border-2 '>
             <h2 className='text-lg mb-4'>Rename Page</h2>
             <input
               type='text'
               value={newPageName}
               onChange={(e) => setNewPageName(e.target.value)}
               placeholder='New Page Name'
-              className='border p-2 rounded w-full'
+              className='border px-8 py-4 outline-zinc-300 rounded w-full'
             />
-            <div className='flex justify-end mt-4'>
+
+            {/* bottom button div  */}
+            <div className='flex justify-between mt-8 w-full '>
               <button
-                className='bg-blue-500 text-white px-4 py-2 rounded'
+                className='bg-blue-500 text-white px-6 py-2 rounded'
                 onClick={renamePage}>
                 Save
               </button>
               <button
-                className='ml-2 bg-gray-300 px-4 py-2 rounded'
+                className='ml-2 bg-gray-300 px-6 py-2 rounded'
                 onClick={() => setIsRenameModalOpen(false)}>
                 Cancel
               </button>
