@@ -7,7 +7,8 @@ function App() {
   const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
   const [newPageName, setNewPageName] = useState("");
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For delete confirmation modal
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [lastClearedText, setLastClearedText] = useState(""); // Store the last cleared text
 
   useEffect(() => {
     const savedNotes = JSON.parse(localStorage.getItem("notes")) || [
@@ -20,10 +21,45 @@ function App() {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
+  // Listen for Ctrl + Z key press to undo clearing
+  useEffect(() => {
+    const handleUndo = (e) => {
+      if (e.ctrlKey && e.key === "z") {
+        undoClearText();
+      }
+    };
+    window.addEventListener("keydown", handleUndo);
+
+    return () => {
+      window.removeEventListener("keydown", handleUndo);
+    };
+  }, [lastClearedText]); // Add lastClearedText to the dependency array
+
   const clearText = () => {
+    const currentText = notes[currentNoteIndex].text;
+
+    // Save the current text to allow undo
+    if (currentText) {
+      setLastClearedText(currentText); // Store the current text before clearing
+    }
+
     const updatedNotes = [...notes];
     updatedNotes[currentNoteIndex].text = "";
     setNotes(updatedNotes);
+    toast.success("Text cleared. Press Ctrl + Z to undo.");
+  };
+
+  const undoClearText = () => {
+    // Restore the text if there is any previously cleared text
+    if (lastClearedText) {
+      const updatedNotes = [...notes];
+      updatedNotes[currentNoteIndex].text = lastClearedText; // Restore the last cleared text
+      setNotes(updatedNotes);
+      setLastClearedText(""); // Clear the stored text to prevent multiple undos
+      toast.success("Undo successful.");
+    } else {
+      toast.error("Nothing to undo.");
+    }
   };
 
   const copyText = () => {
@@ -129,7 +165,7 @@ function App() {
           </button>
         )}
         <button
-          className='hover:bg-blue-100 text-blue-500 px-4 py-2 rounded-lg  '
+          className='hover:bg-blue-100 text-blue-500 px-4 py-2 rounded-lg'
           onClick={openRenameModal}>
           Rename
         </button>
@@ -164,8 +200,8 @@ function App() {
 
       {/* Rename Modal */}
       {isRenameModalOpen && (
-        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 '>
-          <div className='bg-white p-16 rounded border-2 '>
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-white p-16 rounded border-2'>
             <h2 className='text-lg mb-4'>Rename Page</h2>
             <input
               type='text'
@@ -175,7 +211,7 @@ function App() {
               className='border px-8 py-4 outline-zinc-300 rounded w-full'
             />
 
-            <div className='flex justify-between mt-8 w-full '>
+            <div className='flex justify-between mt-8 w-full'>
               <button
                 className='bg-blue-500 text-white px-6 py-2 rounded'
                 onClick={renamePage}>
