@@ -7,6 +7,7 @@ function App() {
   const [currentNoteIndex, setCurrentNoteIndex] = useState(0);
   const [newPageName, setNewPageName] = useState("");
   const [isRenameModalOpen, setIsRenameModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // For delete confirmation modal
 
   useEffect(() => {
     const savedNotes = JSON.parse(localStorage.getItem("notes")) || [
@@ -68,17 +69,23 @@ function App() {
     document.body.removeChild(element);
   };
 
+  const openDeleteModal = () => {
+    setIsDeleteModalOpen(true); // Open delete confirmation modal
+  };
+
   const deleteNote = () => {
     if (notes.length > 1) {
+      const deletedPageName = notes[currentNoteIndex].name; // Store deleted page name
       const updatedNotes = notes.filter(
         (_, index) => index !== currentNoteIndex
       );
       setNotes(updatedNotes);
       setCurrentNoteIndex(0);
-      toast.success(` ${newPageName} Deleted`);
+      toast.success(`${deletedPageName} Deleted`); // Show deleted page name
     } else {
       toast.error("Cannot delete the last note.");
     }
+    setIsDeleteModalOpen(false); // Close the confirmation modal
   };
 
   const openRenameModal = () => {
@@ -117,7 +124,7 @@ function App() {
         {notes.length > 1 && (
           <button
             className='hover:bg-red-100 text-red-500 px-4 py-2 rounded-lg'
-            onClick={deleteNote}>
+            onClick={openDeleteModal}>
             Delete Page
           </button>
         )}
@@ -155,6 +162,7 @@ function App() {
         </button>
       </div>
 
+      {/* Rename Modal */}
       {isRenameModalOpen && (
         <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 '>
           <div className='bg-white p-16 rounded border-2 '>
@@ -167,7 +175,6 @@ function App() {
               className='border px-8 py-4 outline-zinc-300 rounded w-full'
             />
 
-            {/* bottom button div  */}
             <div className='flex justify-between mt-8 w-full '>
               <button
                 className='bg-blue-500 text-white px-6 py-2 rounded'
@@ -177,6 +184,29 @@ function App() {
               <button
                 className='ml-2 bg-gray-300 px-6 py-2 rounded'
                 onClick={() => setIsRenameModalOpen(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {isDeleteModalOpen && (
+        <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50'>
+          <div className='bg-white p-16 rounded border-2'>
+            <h2 className='text-lg mb-4'>
+              Are you sure you want to delete "{notes[currentNoteIndex].name}"?
+            </h2>
+            <div className='flex justify-between mt-8'>
+              <button
+                className='bg-red-500 text-white px-6 py-2 rounded'
+                onClick={deleteNote}>
+                Delete
+              </button>
+              <button
+                className='ml-2 bg-gray-300 px-6 py-2 rounded'
+                onClick={() => setIsDeleteModalOpen(false)}>
                 Cancel
               </button>
             </div>
